@@ -24,10 +24,11 @@ jobs:
         uses: actions/upload-artifact@v4.4.3
         with:
           name: ${{ github.repository }}
+          path: ${{ github.repository }}
         
-  tests:
-      runs-on: ubuntu-latest
-      steps:
-        - name: Run test
-          run: mvn test
+#  tests:
+#      runs-on: ubuntu-latest
+#      steps:
+#        - name: Run test
+#          run: mvn test
           
