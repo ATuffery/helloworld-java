@@ -3,6 +3,12 @@ name: Main Job
 on: 
   push:
     branches: main
+  pull_request:
+    branches: main
+    
+env:
+  PROJET_VERSION: 1.0.0
+  MAVEN_OPTS: "-DskipTests -Djar.finalName=helloworld-$PROJECT_VERSION -Dmaven.repo.local=/home/runner/work/lib"
 
 jobs: 
   build:
@@ -18,7 +24,7 @@ jobs:
           java-version: '17'
           
       - name: Construction du JAR
-        run: mvn clean package -DskipTest -Djar.fileName=${{ github.repository }}-${{ vars.PROJECT_VERSION }}
+        run: mvn clean package MAVEN_OPTS
         
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4.4.3
@@ -26,9 +32,10 @@ jobs:
           name: ${{ github.repository }}
           path: helloworld-java/helloworld-java/target/
         
-#  tests:
-#      runs-on: ubuntu-latest
-#      steps:
-#        - name: Run test
-#          run: mvn test
+  tests:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run test
+        run: mvn test
           
